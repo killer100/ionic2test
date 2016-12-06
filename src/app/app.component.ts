@@ -6,6 +6,7 @@ import { Page1 } from '../pages/page1/page1';
 import { Page2 } from '../pages/page2/page2';
 import { SearchMoviePage } from '../pages/search-movie/search-movie'
 
+
 @Component({
   templateUrl: 'app.html'
 })
@@ -33,6 +34,11 @@ export class MyApp {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
       StatusBar.styleDefault();
+      if (this.platform.is('android')) {
+        StatusBar.styleLightContent();
+        StatusBar.backgroundColorByHexString('#c42626');
+      }
+
       Splashscreen.hide();
     });
   }

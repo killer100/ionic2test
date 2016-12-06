@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
-import { NavController } from 'ionic-angular';
-import { MovieService } from '../../providers/movie-service'
+import { NavController, LoadingController } from 'ionic-angular';
+import { MovieService } from '../../providers/movie-service';
+import { DetailMoviePage } from '../detail-movie/detail-movie';
 /*
   Generated class for the SearchMovie page.
 
@@ -8,45 +9,62 @@ import { MovieService } from '../../providers/movie-service'
   Ionic pages and navigation.
 */
 @Component({
-  selector: 'page-search-movie',
-  templateUrl: 'search-movie.html'
+    selector: 'page-search-movie',
+    templateUrl: 'search-movie.html'
 })
 export class SearchMoviePage {
 
-  public titulo: string;
-  public pagination = {
-    results: [],
-    total: 0,
-    total_pages: 0
-  };
-  public errorMessage;
+    public titulo: string;
+    public pagination = {
+        results: [],
+        total: 0,
+        total_pages: 0
+    };
+    public errorMessage;
 
-  constructor(public navCtrl: NavController, private readonly _movieService: MovieService) {
-    this.titulo = "";
-  }
+    constructor(public navCtrl: NavController, private readonly _movieService: MovieService, public loadingCtrl: LoadingController) {
+        this.titulo = "";
+    }
 
-  public SearchMovie() {
-    this._movieService.BuscarMovie(this.titulo, 1).subscribe(
-      Response => {
-        this.pagination.results = Response.results;
-        this.pagination.total = Response.total_results;
-        this.pagination.total_pages = Response.total_pages;
-        console.log(this.pagination);
-      },
-      error => this.errorMessage = <any>error);
-  };
+    private CreateLoader(text: string) {
+        return this.loadingCtrl.create({
+            content: text
+        });
+    }
 
-  public onCancel($event) {
-    this.titulo = "";
-  }
+    public SearchMovie() {
+        if (this.titulo.length < 1) {
+            return false;
+        }
+        let loader = this.CreateLoader('Buscando...');
+        loader.present();
+        this._movieService.BuscarMovie(this.titulo, 1).subscribe(
+            Response => {
+                this.pagination.results = Response.results;
+                this.pagination.total = Response.total_results;
+                this.pagination.total_pages = Response.total_pages;
+                loader.dismiss();
+            },
+            error => { this.errorMessage = <any>error });
+    }
 
-  public onInput($event) {
-    console.log("buscar")
-    this.SearchMovie();
-  }
+    public onCancel($event) {
+        this.titulo = "";
+    }
 
-  ionViewDidLoad() {
-    console.log('Hello SearchMoviePage Page');
-  }
+    public onInput($event) {
+        console.log("buscar")
+        this.SearchMovie();
+    }
+
+    ionViewDidLoad() {
+        console.log('Hello SearchMoviePage Page');
+    }
+
+    public SelectMovie(movie_id) {
+        this.navCtrl.push(DetailMoviePage, {
+            movie_id: movie_id,
+        });
+    }
 
 }

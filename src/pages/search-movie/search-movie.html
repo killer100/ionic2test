@@ -6,7 +6,7 @@
 -->
 <ion-header>
 
-  <ion-navbar color="danger">
+  <ion-navbar color="primary">
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
@@ -18,19 +18,50 @@
 </ion-header>
 
 
-<ion-content padding>
+<ion-content style="background:#eee;">
 
 
 
   <ion-card *ngFor="let item of pagination.results">
 
-    <ion-card-header>
-      {{item.title}}
-    </ion-card-header>
+    <ion-row no-padding>
+      <ion-col width-33 no-padding>
+        <img src="https://image.tmdb.org/t/p/w185_and_h278_bestv2{{item.poster_path}}" alt="">
+      </ion-col>
+      <ion-col>
+        <ion-row>
+          <ion-col width-67>
+            <p style="font-weight: bold;">{{item.title}}</p>
+          </ion-col>
+          <ion-col text-right>
+            {{item.vote_average}}
+            <ion-icon name="star"></ion-icon>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            <p>{{item.overview | truncate : ["80", "..."]}}</p>
+          </ion-col>
+        </ion-row>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col no-padding>
+        <button ion-button icon-right clear small (click)="SelectMovie(item.id)">
+        <div>Más información</div>
+        <ion-icon name="ios-arrow-forward"></ion-icon>
+      </button>
+      </ion-col>
+    </ion-row>
 
-    <ion-card-content>
-      <img src="https://image.tmdb.org/t/p/w185_and_h278_bestv2{{item.poster_path}}" alt="">
-    </ion-card-content>
+    <!--<ion-card-content>
+      <ion-card-title>
+        {{item.title}}
+      </ion-card-title>
+      <p>
+        {{item.overview | truncate : ["80", "..."]}}
+      </p>
+    </ion-card-content>-->
 
   </ion-card>
 

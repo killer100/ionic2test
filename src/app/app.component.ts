@@ -9,7 +9,7 @@ import { SearchMoviePage } from '../pages/search-movie/search-movie'
 
 @Component({
   templateUrl: 'app.html'
-})
+}) 
 export class MyApp {
   @ViewChild(Nav) nav: Nav;
 

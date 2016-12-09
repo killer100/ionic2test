@@ -7,28 +7,21 @@ import { MovieService } from '../../providers/movie-service';
 
   See http://ionicframework.com/docs/v2/components/#navigation for more info on
   Ionic pages and navigation.
-*/
+*/ 
 @Component({
   selector: 'page-detail-movie',
   templateUrl: 'detail-movie.html'
-})
-export class DetailMoviePage {
+}) 
+export class DetailMoviePage {       
 
   private errorMessage;
   public movie;
+  public default_image = 'assets/img/img-background.jpg';
+  public backdrop;
 
-  constructor(public navCtrl: NavController, private readonly _movieService: MovieService, private readonly _loadingCtrl: LoadingController, private _navParams: NavParams) {
-    this.movie = {};
-  }
-
-  public GetMovieDetail() {
-    var loader = this.CreateLoader('Cargando Información');
-    loader.present();
-    this._movieService.DetallePelicula(this._navParams.get("movie_id")).
-      subscribe(
-      Response => { this.movie = Response; loader.dismiss(); console.log(this.movie) },
-      error => { this.errorMessage = <any>error }
-      );
+  constructor(public navCtrl: NavController, private readonly _loadingCtrl: LoadingController, private _navParams: NavParams) {
+    this.movie = _navParams.get('movie');
+    this.backdrop = `https://image.tmdb.org/t/p/w500${this.movie.backdrop_path}`;
   }
 
   private CreateLoader(text: string) {
@@ -39,7 +32,6 @@ export class DetailMoviePage {
 
   ionViewDidLoad() {
     //console.log('Hello DetailMoviePage Page');
-    this.GetMovieDetail();
   }
 
 }

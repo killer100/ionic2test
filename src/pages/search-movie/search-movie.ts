@@ -62,8 +62,21 @@ export class SearchMoviePage {
     }
 
     public SelectMovie(movie_id) {
+        var loader = this.CreateLoader('Cargando Información');
+        loader.present();
+        this._movieService.DetallePelicula(movie_id).
+            subscribe(
+            Response => {
+                this.GoToDetail(Response);
+                loader.dismiss();
+            }, 
+            error => { this.errorMessage = <any>error }
+            );
+    }
+
+    private GoToDetail(movie) {
         this.navCtrl.push(DetailMoviePage, {
-            movie_id: movie_id,
+            movie: movie
         });
     }
 
